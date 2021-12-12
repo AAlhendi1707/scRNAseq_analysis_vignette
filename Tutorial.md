@@ -1035,3 +1035,37 @@ plot_communication_graph(LRP = cluster,
                          is_cluster = T)
 ```
 ![](images/comunet_lrp_heatmap.png) ![](images/comunet_lrp_cluster10.png)
+
+
+We can as well plot the average communication pattern of the first three clusters
+
+```R
+# plot communication plots for clusters (first three clusters)
+for(clusterNr in c(1:3)){
+    cluster  <-  paste("cluster"
+                      ,clusterNr)
+    plot_communication_graph(LRP = cluster
+                       ,weight_array = lrp_clusters$weight_array_by_cluster[,,cluster]
+                       ,ligand_receptor_pair_df = interactions$ligand_receptor_pair_df
+                       ,nodes = interactions$nodes
+                       ,is_cluster = T
+                      )
+}
+```
+ 
+We see that the first cluster represents a communication pattern where TE is preferentially sending signals to other cell types. In cluster 2, exVE is preferentially sending signals, and in cluster 3 emVE is sending signals.
+
+It is worth noting here that if you are interested in a "family" of particular ligand-receptor pairs, which are not identified as a separate cluster by COMUNET, you can still plot a communication graph of this family by passing the family weight array as weight_array parameter as setting is_cluster = TURE to the plot_communication_graph funciton. One of the ways to calculate the family weight array could be to take an average value for each edge.
+
+As the last step, let us inspect, which ligand-receptor pairs are present in the (first three) clusters.
+ 
+```R
+ # plot ligand-receptor pairs in each cluster (first three clusters)
+for(clusterNr in c(1:3)){
+    plot_lig_rec(cluster_of_interest = clusterNr
+                 ,lrp_clusters = lrp_clusters$clusters
+                 ,ligand_receptor_pair_df = interactions$ligand_receptor_pair_df
+                 ,node_label_cex = 0.5
+          )
+}
+```
